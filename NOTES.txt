@@ -1,0 +1,60 @@
+# Personal notes
+----------------
+
+
+- What does a CPU do?
+---------------------
+* Fetch an instruction from memory
+* Decode what the instruction means
+* Execute the instruction
+* Increment the program counter
+
+Its a small infinite loop, that is used to process instructions and that is also called as Pipeline.
+
+
+- A Basic CPU
+-------------
+* Memory, for storing instructions and data
+* A Program counter, which allows you to iterate through your program memory
+* Control logic, which orchestrate data flow and manages state based on instructions
+* An ALU, which executes logical and mathematical operations.
+
+
+
+- The below note is taken from Perplexity
+
+- Step 1: Define your CPU architecture
+--------------------------------------
+* ALU: Executes arithemetic and logical operations
+* Registers: Small storage locations for quick data access
+* Instruction memory: Stores the instruction to be executed
+* Data memory: Holds data that the CPU process
+* Control unit: Directs operation based on fetched instruction
+* Program counter (PC): Keeps track of the address of the next instruction
+
+- Example Architecture
+----------------------
+Designing a 16-bit CPU with the following specifications:
+* Registers: 4 registers (R0, R1, R2, R3) each 16-bit wide
+* Instruction set: Basic operations like ADD, SUB, LOAD, STORE.
+
+- Create an Instruction Set
+---------------------------
+Design an instruction set that defines how your CPU will operate. Each instructions can be represented in a binary format. For example:
+
+Opcode	Instruction Description
+------	----------- -----------
+0000	ADD	    Add two registers
+0001	SUB	    Subtract two registers
+0010	LOAD	    Load data into a register
+0011	STORE	    Store register data into memory
+
+- Example Instruction Format
+----------------------------
+For a 16-bit instruction:
+* Bits [15:12]  : Opcode (4-bits)
+* Bits [11:8]	: Destination Register (4 bits)
+* Bits [7:4]	: Source register 1 (4 bits)
+* Bits [3:0]	: Source register 2 or Immediate value (4 bits)
+
+- End of note taken from Perplexity
