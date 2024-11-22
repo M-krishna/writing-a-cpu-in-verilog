@@ -1,7 +1,11 @@
 module my_basic_cpu_tb;
-    my_basic_cpu mbc ();
+    reg clk, reset;
 
-    initial begin
-	#5;
-    end
+    CPU  cpu (
+	.clk(clk),
+	.reset(reset)
+    );
+
+    always #2 clk <= ~clk;
+
 endmodule

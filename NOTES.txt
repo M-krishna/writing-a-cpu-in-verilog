@@ -11,6 +11,23 @@
 
 Its a small infinite loop, that is used to process instructions and that is also called as Pipeline.
 
+- We know what a CPU does now. But what is an instruction???
+------------------------------------------------------------
+* As the name suggests an instruction contains all the things that the CPU needs for it to execute.
+* For example "ADD r1, r2". This instruction will be represented in binary.
+* All the instructions will be loaded into "Instruction Memory".
+* For example an instruction memory would look something like:
+
+| Opcode | Dest Reg | Src Reg1 | Src Reg2/Immediate |
+|--------|----------|----------|---------------------|
+| 0000   | 01       | 10       | 00001010            |
+
+Here:
+* Opcode: 4 bits
+* Destination register: 2 bits
+* Source register 1: 2 bits
+* Source register 2 or Immediate Value: 8 bits
+
 
 - A Basic CPU
 -------------
