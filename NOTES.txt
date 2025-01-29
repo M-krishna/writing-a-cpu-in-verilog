@@ -75,3 +75,14 @@ For a 16-bit instruction:
 * Bits [3:0]	: Source register 2 or Immediate value (4 bits)
 
 - End of note taken from Perplexity
+
+
+Notes for building a 4-bit CPU
+------------------------------
+
+A 4-bit CPU would be able to:
+
+* Handle numbers from 0 to 15 (2^4 - 1)
+* Perform basic arithmetic operations
+* Execute simple instructions
+* Store small amounts of data

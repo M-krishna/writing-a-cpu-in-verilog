@@ -15,7 +15,7 @@ module CPU (
 	if (reset) begin
 	    program_counter <= 4'b0000; // reset the program counter to 0
 	end else begin
-	    program_counter += program_counter + 1;
+	    program_counter <= program_counter + 1;
 	end
     end
 endmodule
