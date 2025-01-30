@@ -51,7 +51,7 @@ module CPU(
 
 
     // We have basic stuffs in place, let's begin fetching the instruction from memory and do something
-    wire [3:0] current_instruction;
+    wire [7:0] current_instruction;
     assign current_instruction = instruction_memory[pc];
 
     // Now we have our current instruction, let's decode it and get the opcode and data from the instruction
