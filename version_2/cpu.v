@@ -5,7 +5,7 @@ module CPU(
     output wire [3:0] output_data
 );
 
-    // Out 4-bit CPU will have the following
+    // Our 4-bit CPU will have the following
     // PC = Program counter
     // Instruction memory = Where we store our instructions for our CPU to execute
     // Registers = To do basic operations with the data we fetch from instruction memory

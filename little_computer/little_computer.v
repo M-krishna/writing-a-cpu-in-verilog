@@ -1,0 +1,4 @@
+module lc(
+    
+);
+endmodule

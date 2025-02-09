@@ -1,0 +1,125 @@
+Components of LC-3 (Notes taken from Claude)
+------------------
+
+Registers
+
+    8 General-Purpose Registers (R0-R7)
+
+    Used for temporary data storage
+    Can hold 16-bit values
+
+
+    Program Counter (PC)
+
+    Stores the address of the next instruction to be executed
+
+
+    Condition Code Registers (CCR)
+
+    N (Negative) Flag
+    Z (Zero) Flag
+    P (Positive) Flag
+
+
+    Instruction Register (IR)
+
+    Holds the current instruction being executed
+
+
+
+
+Memory
+
+    16-bit word size
+    16-bit addressing
+    Supports 2^16 = 65,536 memory locations
+    Typically divided into:
+
+    User program space
+    Operating system space
+    Memory-mapped I/O
+
+
+
+
+Instruction Set
+
+    15 total instructions
+    Key instructions include:
+
+    ADD (addition)
+    AND (bitwise AND)
+    NOT (bitwise NOT)
+    LD (Load)
+    ST (Store)
+    BR (Branch)
+    JMP (Jump)
+    JSR (Jump to Subroutine)
+
+
+
+
+Addressing Modes
+
+    Immediate
+    Register
+    Direct
+    Indirect
+    Base + Offset
+
+
+Datapath Components
+
+    ALU (Arithmetic Logic Unit)
+
+    Performs arithmetic and logical operations
+
+
+    Multiplexers
+
+    Route data between different components
+
+
+    Sign Extenders
+
+    Convert smaller bit-width values to 16-bit
+
+
+
+
+Control Unit
+
+    Manages instruction fetch-decode-execute cycle
+    Generates control signals
+    Coordinates between different components
+
+
+Input/Output
+
+    Memory-mapped I/O
+    Supports basic input and output operations
+
+
+Interrupt Handling
+
+    Basic interrupt mechanism
+    Can handle system-level interrupts
+
+
+Instruction Cycle
+
+    Fetch Stage
+
+    Get instruction from memory using PC
+
+
+    Decode Stage
+
+    Interpret the instruction
+
+
+    Execute Stage
+
+    Perform the instruction's operation
+
+
