@@ -26,7 +26,7 @@ module cpu(
     assign data = current_instruction[0];
 
     // Register file
-    reg [1:0] register_A;
+    reg [1:0] register_A; // the maximum decimal value you can store is 3
 
     // Assign output data
     assign output_data = register_A;
@@ -36,8 +36,8 @@ module cpu(
 
     // Dumping the instruction directly into the code
     initial begin
-        instruction_memory[0] = {LOAD, 1'b1};
-        instruction_memory[1] = {ADD, 1'b1};
+        instruction_memory[0] = {LOAD, 1'd1};
+        instruction_memory[1] = {ADD, 1'd1};
         instruction_memory[2] = {LOAD, 1'b0}; // NOP equivalent
         instruction_memory[3] = {LOAD, 1'b0}; // NOP equivalent
         // It's okay to ignore instruction memory 2 & 3
@@ -49,8 +49,8 @@ module cpu(
             register_A <= 1'b0;
         end else begin
             case (opcode)
-                LOAD : register_A <= {data, data};
-                ADD  : register_A <= register_A + {data, data}; 
+                LOAD : register_A <= data;
+                ADD  : register_A <= register_A + data; 
             endcase
             // Increment program counter
             pc <= pc + 1;
