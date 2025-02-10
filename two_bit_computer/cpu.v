@@ -35,12 +35,16 @@ module cpu(
     localparam ADD  = 1'b1; // Adds the immediate value with the value in register A
 
     // Dumping the instruction directly into the code
+    //initial begin
+    //    instruction_memory[0] = {LOAD, 1'd1};
+    //    instruction_memory[1] = {ADD, 1'd1};
+    //    instruction_memory[2] = {LOAD, 1'b0}; // NOP equivalent
+    //    instruction_memory[3] = {LOAD, 1'b0}; // NOP equivalent
+    //    // It's okay to ignore instruction memory 2 & 3
+    //end
+
     initial begin
-        instruction_memory[0] = {LOAD, 1'd1};
-        instruction_memory[1] = {ADD, 1'd1};
-        instruction_memory[2] = {LOAD, 1'b0}; // NOP equivalent
-        instruction_memory[3] = {LOAD, 1'b0}; // NOP equivalent
-        // It's okay to ignore instruction memory 2 & 3
+	$readmemh("instructions.hex", instruction_memory);
     end
 
     always @(posedge clk or posedge reset) begin
