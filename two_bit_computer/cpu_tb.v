@@ -13,15 +13,14 @@ module cpu_tb;
 
     initial begin
         clk = 0;
-        forever #5 clk = ~clk;
+        reset = 1;
+        forever #2 clk = ~clk;
     end
 
     initial begin
-        reset = 1;
         #10; // give it some time
         reset = 0;
-
-        #100;
+	#60
         $finish; // finish the simulation
     end
 
