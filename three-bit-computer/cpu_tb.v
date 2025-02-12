@@ -25,6 +25,6 @@ module cpu_tb;
     end
 
     initial begin
-        $monitor("[Time=%0t clk=%0d reset=%0d pc=%0d output_data=%0d]", $time, clk, reset, _cpu.pc, output_data);
+        $monitor("[Time=%0t] clk=%0d reset=%0d pc=%0d data_memory[0]=%0d data_memory[1]=%0d output_data=%0d", $time, clk, reset, _cpu.pc, _cpu.data_memory[0], _cpu.data_memory[1], output_data);
     end
 endmodule

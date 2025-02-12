@@ -29,6 +29,8 @@ class Assembler:
                 opcode = 0b01
             elif mnemonic == "SUB":
                 opcode = 0b10
+            elif mnemonic == "STORE":
+                opcode = 0b11;
             else:
                 raise Exception(f"Unknown mnemonic: {mnemonic}")
 

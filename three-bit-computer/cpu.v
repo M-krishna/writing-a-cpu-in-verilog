@@ -31,6 +31,9 @@ module cpu(
     // Register file
     reg [2:0] register_A;
 
+    // Data memory
+    reg [2:0] data_memory [0:1]; // 2 locations
+
     assign output_data = register_A;
 
     initial begin
@@ -41,16 +44,20 @@ module cpu(
     localparam LOAD   = 2'b00;
     localparam ADD    = 2'b01;
     localparam SUB    = 2'b10;
+    localparam STORE  = 2'b11; // used to store data in data memory
 
     always @(posedge clk) begin
         if (reset) begin // Synchronous reset
             pc <= 3'b0;
             register_A <= 3'b0;
+            data_memory[0] <= 3'b0;
+            data_memory[1] <= 3'b0;
         end else begin
             case (opcode)
                 LOAD   : register_A <= data;
                 ADD    : register_A <= register_A + data;
                 SUB    : register_A <= register_A - data;
+                STORE  : data_memory[data] <= register_A;
             endcase
             pc <= pc + 1;
         end
