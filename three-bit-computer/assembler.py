@@ -180,6 +180,65 @@ class Scanner:
     ######### END OF HELPER METHODS ####
 
 
+class Instruction:
+    def __init__(self, mnemonic, operand):
+        self.mnemonic = mnemonic
+        self.operand = operand
+
+    def __repr__(self):
+        return f"Instruction({self.mnemonic}, {self.operand})"
+class Parser:
+
+    MNEMONICS: List[str] = ["LOAD", "ADD", "SUB", "STORE"]
+
+    def __init__(self, tokens: List[Token]):
+        self.tokens = tokens
+        self.current_position = 0
+        self.instructions: List[Instruction] = []
+
+
+    def parse(self):
+        while not self.isEnd():
+            instruction: Instruction = self.parse_instructions()
+            self.instructions.append(instruction)
+
+    def parse_instructions(self) -> Instruction:
+        current_token: Token = self.advance()
+
+        if current_token.tt not in self.MNEMONICS:
+            raise Exception(f"Syntax error: Unknown token: {current_token}")
+
+        mnemonic: Token = current_token.lexeme.upper()
+
+        # After the mnemonic, it should be number
+        operand_token = self.advance()
+        operand = int(operand_token.lexeme)
+        if operand not in [0, 1]:
+            raise SyntaxError(f"Unknown operand: {operand} for mnemonic: {mnemonic}")
+        
+        return Instruction(mnemonic, operand)
+
+    ########### HELPER METHODS #############
+    def peek(self) -> Optional[Token]:
+        if not self.isEnd():
+            return self.tokens[self.current_position]
+        return None
+
+    def advance(self) -> Token:
+        current_token = self.peek()
+        if current_token:
+            self.current_position += 1
+            return current_token
+        raise Exception("Reached end of tokens")
+
+    def isEnd(self) -> bool:
+        return (self.current_position >= len(self.tokens)) or (self.tokens[self.current_position].tt == TokenType.EOF.name)
+
+    @property
+    def get_instructions(self) -> List[Instruction]:
+        return self.instructions
+    ########### END OF HELPER METHODS ######
+
 if __name__ == "__main__":
     """
     assembler = Assembler()
@@ -191,3 +250,7 @@ if __name__ == "__main__":
     scanner = Scanner(source=contents)
     scanner.scan_tokens()
     print(scanner.get_tokens)
+
+    parser = Parser(scanner.get_tokens)
+    parser.parse()
+    print(parser.get_instructions)
