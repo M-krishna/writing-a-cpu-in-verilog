@@ -1,2 +1,6 @@
 ; this is a comment
 LOAD 1
+ADD 1
+SUB 1
+STORE 0
+ADD 1

@@ -126,11 +126,18 @@ class Scanner:
 
     def default_case(self, c: str):
         if self.isDigit(c):
-            pass
+            while (self.isDigit(self.peek())):
+                self.advance()
+            number: str = self.source[self.start_position:self.current_position]
+            self.generate_and_add_token(TokenType.NUMBER.name, literal=number)
         elif self.isWhiteSpace(c):
             pass # Ignore whitespace
         elif self.isAlpha(c):
-            pass
+            while (self.isAlpha(self.peek())):
+                self.advance()
+            text: str = self.source[self.start_position:self.current_position]
+            token_type: TokenType = self.keywords.get(text)
+            self.generate_and_add_token(token_type, literal=text)
         else:
             print(f"Invalid character: {c}")
 
@@ -139,10 +146,9 @@ class Scanner:
         self.current_position += 1
         return self.source[self.current_position - 1]
 
-    def peek(self) -> Optional[str]:
-        if not self.is_at_end():
-            return self.source[self.current_position]
-        return None
+    def peek(self) -> str:
+        if self.is_at_end(): return '\0'
+        return self.source[self.current_position]
 
     def match(self, expected_token: str) -> bool:
         if self.is_at_end(): return False
@@ -166,7 +172,7 @@ class Scanner:
         return c in [SPACE, TABSPACE, NEWLINE]
 
     def isAlpha(self, c: str) -> bool:
-        pass
+        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c == '_')
 
     @property
     def get_tokens(self) -> List[Token]:
