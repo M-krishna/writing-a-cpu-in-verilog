@@ -5,3 +5,5 @@
 .vscode
 *.hex
 **/*.hex
+*.bin
+**/*.bin

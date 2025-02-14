@@ -9,3 +9,4 @@ build: cpu.v cpu_tb.v
 clean:
 	rm -rf *.o
 	rm -rf *.hex
+	rm -rf *.bin

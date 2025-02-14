@@ -2,4 +2,4 @@
 LOAD 1
 ADD 1
 LOAD 0
-ADD 0
+ADD 1

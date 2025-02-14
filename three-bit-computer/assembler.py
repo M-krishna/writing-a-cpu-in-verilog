@@ -239,6 +239,52 @@ class Parser:
         return self.instructions
     ########### END OF HELPER METHODS ######
 
+
+class CodeGenerator:
+
+    OUTPUT_BINARY_FILE = "intructions.bin"
+    OUTPUT_HEX_FILE    = "instructions.hex"
+
+    OPCODES = {
+        "LOAD": "00",
+        "ADD": "01",
+        "SUB": "10",
+        "STORE": "11"
+    }
+
+    class FILE_TYPE(Enum):
+        BINARY = 'binary'
+        HEX    = 'hex'
+
+    def __init__(self, instructions: List[Instruction]):
+        self.instructions: List[Instruction] = instructions
+        self.binary_instructions = []
+        self.hex_instructions = []
+
+    def generate_binary_code(self):
+        for instruction in self.instructions:
+            opcode = self.OPCODES.get(instruction.mnemonic)            
+            operand = str(instruction.operand)
+            binary_code = opcode + operand
+            self.binary_instructions.append(binary_code)
+
+    def generate_hex_code(self):
+        for instruction in self.instructions:
+            opcode = int(self.OPCODES.get(instruction.mnemonic))
+            operand = instruction.operand
+
+            code = (opcode << 1) | (operand & 1)
+            self.hex_instructions.append(code)
+
+    def write_code(self, type: FILE_TYPE):
+        instructions: str = self.binary_instructions if type.value == 'binary' else self.hex_instructions
+        file_type: str = self.OUTPUT_BINARY_FILE if type.value == 'binary' else self.OUTPUT_HEX_FILE
+        
+        with open(file_type, "w") as f:
+            for code in instructions:
+                f.write(str(code) + "\n")
+
+
 if __name__ == "__main__":
     """
     assembler = Assembler()
@@ -254,3 +300,9 @@ if __name__ == "__main__":
     parser = Parser(scanner.get_tokens)
     parser.parse()
     print(parser.get_instructions)
+
+    code_generator = CodeGenerator(parser.get_instructions)
+    code_generator.generate_binary_code()
+    code_generator.write_code(code_generator.FILE_TYPE.BINARY)
+    code_generator.generate_hex_code()
+    code_generator.write_code(code_generator.FILE_TYPE.HEX)
