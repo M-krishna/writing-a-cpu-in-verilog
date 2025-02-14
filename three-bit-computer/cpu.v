@@ -37,7 +37,7 @@ module cpu(
     assign output_data = register_A;
 
     initial begin
-        $readmemh("instructions.hex", instruction_memory);
+        $readmemb("instructions.bin", instruction_memory);
     end
 
     // Mnemonics

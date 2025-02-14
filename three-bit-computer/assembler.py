@@ -242,7 +242,7 @@ class Parser:
 
 class CodeGenerator:
 
-    OUTPUT_BINARY_FILE = "intructions.bin"
+    OUTPUT_BINARY_FILE = "instructions.bin"
     OUTPUT_HEX_FILE    = "instructions.hex"
 
     OPCODES = {
