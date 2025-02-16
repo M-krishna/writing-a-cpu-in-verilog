@@ -1,0 +1,10 @@
+; Instructions for my 4-bit Computer
+; At max it can hold 16 instructions, each 4 bit wide
+; First 3 bits starting from MSB is used for opcode
+; The LSB is used as data bit
+; Our CPU contains only one register (register_A), which is an accumulator
+; Which accumulates value
+
+LOAD 1  ; loads 1 into accumulator (register A)
+ADD 1   ; adds 1 to accumulator and stores it in accumulator (2 is the value of the accumulator now)
+JMP 1   ; jumps to address 1

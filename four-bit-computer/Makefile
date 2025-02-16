@@ -1,6 +1,6 @@
 assemble: assembler.py
 	chmod +x ./assembler.py
-	./assembler
+	./assembler.py
 
 build:
 	iverilog -o cpu.o cpu.v cpu_tb.v

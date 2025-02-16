@@ -78,7 +78,12 @@ module cpu(
     localparam JMP      = 3'b110;
     localparam HLT      = 3'b111;
 
-    always @(posedge clk or posedge reset) begin
+    // Instructions
+    initial begin
+        $readmemh("instructions.hex", instruction_memory);
+    end
+
+    always @(posedge clk or posedge reset) begin // Asynchronous reset
         if (reset) begin
             pc <= 4'b0;
             register_A <= 4'b0;
