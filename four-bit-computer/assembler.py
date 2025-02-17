@@ -16,8 +16,10 @@ class TokenType(Enum):
     HLT     = "HLT"
 
     # OTHERS
-    SEMICOLON   = "SEMICOLON"
     NUMBER      = "NUMBER"
+    SEMICOLON   = "SEMICOLON"
+    UNDERSCORE  = "UNDERSCORE"
+    COLON       = "COLON"
     EOF         = "EOF"
 
 
@@ -62,7 +64,8 @@ class Scanner:
         c: str = self.advance()
 
         token_dict: dict = {
-            ";": lambda: self.handle_semicolon()
+            ";": lambda: self.handle_semicolon(),
+            ":": lambda: self.handle_colon()
         }
 
         try:
@@ -74,6 +77,15 @@ class Scanner:
     def add_token(self, token: Token):
         self.tokens.append(token)
 
+    def handle_colon(self):
+        text: str = self.source[self.start_position:self.current_position]
+        token: Token = Token(
+            TokenType.COLON.name,
+            lexeme=text,
+            line=self.line
+        )
+        self.add_token(token)
+
     def handle_semicolon(self):
         while (self.peek() != "\n" and not self.is_at_end()):
             self.advance()
@@ -81,7 +93,7 @@ class Scanner:
     def default_case(self, c: str):
         if self.isDigit(c):
             self.number()
-        elif self.isAlpha(c):
+        elif self.isAlphaNumeric(c):
             self.string()
         elif self.isWhitespace(c):
             self.whitespace()
@@ -98,7 +110,7 @@ class Scanner:
         self.add_token(token)
 
     def string(self):
-        while (self.isAlpha(self.peek())):
+        while (self.isAlphaNumeric(self.peek())):
             self.advance()
         text: str = self.source[self.start_position:self.current_position]
         token_type: TokenType = self.keywords.get(text)
@@ -123,7 +135,10 @@ class Scanner:
         return c >= '0' and c <= '9'
 
     def isAlpha(self, c: str) -> bool:
-        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z')
+        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c == "_")
+
+    def isAlphaNumeric(self, c: str) -> bool:
+        return self.isDigit(c) or self.isAlpha(c)
 
     def advance(self) -> str:
         character = self.source[self.current_position]
