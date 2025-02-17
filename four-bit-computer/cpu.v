@@ -83,7 +83,7 @@ module cpu(
 
     // Instructions
     initial begin
-        $readmemh("instructions.hex", instruction_memory);
+        $readmemh("./output/instructions.hex", instruction_memory);
     end
 
     always @(posedge clk or posedge reset) begin // Asynchronous reset
