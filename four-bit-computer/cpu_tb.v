@@ -2,13 +2,13 @@ module cpu_tb;
     // Test signals
     reg clk;
     reg reset;
-    wire [3:0] output_data
+    wire [3:0] output_data;
 
     // Module initialization
     cpu _cpu(
         .clk(clk),
         .reset(reset),
-        output_data(output_data)
+        .output_data(output_data)
     );
 
     initial begin

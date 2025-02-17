@@ -65,6 +65,9 @@ module cpu(
 
     wire [3:0] current_instruction = instruction_memory[pc];
 
+    assign opcode = current_instruction[3:1];
+    assign data = current_instruction[0];
+
     reg [3:0] register_A;
 
     assign output_data = register_A;
