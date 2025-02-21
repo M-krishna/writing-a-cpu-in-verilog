@@ -14,6 +14,7 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(tokens[0].lexeme, TokenType.LOAD.value)
         self.assertEqual(tokens[1].tt, TokenType.NUMBER.name)
         self.assertEqual(tokens[1].lexeme, str(1))
+        self.assertEqual(tokens[2].tt, TokenType.EOF.name)
 
 
 if __name__ == "__main__":

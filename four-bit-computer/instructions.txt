@@ -13,9 +13,9 @@ JMP 1   ; jumps to address 1
 
 ; Implementing labels in my assembly
 
-; JMP TEST_1
+JMP TEST_1
 
-; TEST_1:
-;    LOAD 1
-;    ADD 1
-;    JMP 1
+TEST_1:
+    LOAD 1
+    ADD 1
+    JMP 1
