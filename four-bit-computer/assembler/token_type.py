@@ -11,6 +11,9 @@ class TokenType(Enum):
     JMP     = "JMP"
     HLT     = "HLT"
 
+    # LABEL
+    LABEL   = "LABEL"
+
     # OTHERS
     NUMBER      = "NUMBER"
     SEMICOLON   = "SEMICOLON"

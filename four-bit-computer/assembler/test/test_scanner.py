@@ -16,6 +16,21 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(tokens[1].lexeme, str(1))
         self.assertEqual(tokens[2].tt, TokenType.EOF.name)
 
+    def test_labels(self):
+        source = """
+            JMP TEST_1
+
+            TEST_1:
+                LOAD 1
+                ADD 1
+                JMP 1
+        """
+        scanner = Scanner(source)
+        scanner.scan_tokens()
+        tokens = scanner.get_tokens
+        for token in tokens:
+            print(token)
+
 
 if __name__ == "__main__":
     unittest.main()

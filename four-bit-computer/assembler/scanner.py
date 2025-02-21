@@ -82,7 +82,7 @@ class Scanner:
         while (self.isAlphaNumeric(self.peek())):
             self.advance()
         text: str = self.source[self.start_position:self.current_position]
-        token_type: TokenType = self.keywords.get(text)
+        token_type: TokenType = self.keywords.get(text, TokenType.LABEL.name)
         token: Token = Token(
             token_type, text, line=self.line
         )

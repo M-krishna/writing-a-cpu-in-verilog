@@ -33,6 +33,9 @@ class Parser:
 
         return Instruction(mnemonic, operand)
 
+    def parse_label(self):
+        pass
+
     ################ HELPER FUNCTIONS #############
     def advance(self) -> Optional[Token]:
         current_token: Token = self.peek()
