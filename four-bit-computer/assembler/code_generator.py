@@ -4,11 +4,13 @@ from typing import List
 from instruction import Instruction
 
 
+class FileType(Enum):
+    HEX_FILE    = "HEX_FILE"
+    BINARY_FILE = "BIN_FILE"
+
+
 class CodeGenerator:
 
-    class FileType(Enum):
-        HEX_FILE    = "HEX_FILE"
-        BINARY_FILE = "BIN_FILE"
     
     # File data
     OUTPUT_DIR      = "output"
@@ -31,13 +33,10 @@ class CodeGenerator:
         self.binary_code    = []
         self.hex_code       = []
 
-        os.makedirs(self.OUTPUT_DIR, exist_ok=True)
-
     def generate_binary_code(self):
         for instruction in self.instructions:
             binary_code = self.opcodes.get(instruction.mnemonic) + str(instruction.data)
             self.binary_code.append(binary_code)
-        self.write_to_file(self.FileType.BINARY_FILE)
 
     def generate_hex_code(self):
         for instruction in self.instructions:
@@ -47,7 +46,6 @@ class CodeGenerator:
             hex_code = (opcode << 1) | (data & 1)
             hex_instruction = "{:x}".format(hex_code)
             self.hex_code.append(hex_instruction)
-        self.write_to_file(self.FileType.HEX_FILE)
 
     def write_to_file(self, file_type: FileType):
         instructions: str = self.binary_code if file_type.value == "BIN_FILE" else self.hex_code
