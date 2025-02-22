@@ -16,8 +16,18 @@ class TestParser(unittest.TestCase):
         parser.parse_tokens()
         instructions: Instruction = parser.get_instructions
 
-        self.assertEqual(instructions[0].mnemonic, TokenType.LOAD.name)
-        self.assertEqual(instructions[0].data, str(1))
+        # (expected_mnemonic, expected_data)
+        expected = [
+            (TokenType.LOAD.name, str(1))
+        ]
+
+        self.assertEqual(len(instructions), len(expected), "Instruction count mismatch")
+
+        for index, (expected_mnemonic, expected_operand) in enumerate(expected):
+            with self.subTest(index):
+                self.assertEqual(instructions[index].mnemonic, expected_mnemonic)
+                self.assertEqual(instructions[index].data, expected_operand)
+
 
     def test_parse_label(self):
         source = """
@@ -36,14 +46,20 @@ class TestParser(unittest.TestCase):
 
         instructions: List[Instruction] = parser.get_instructions
 
-        self.assertEqual(instructions[0].data, 1)
-        self.assertEqual(instructions[0].mnemonic, TokenType.JMP.name)
-        self.assertEqual(instructions[1].data, str(1))
-        self.assertEqual(instructions[1].mnemonic, TokenType.LOAD.name)
-        self.assertEqual(instructions[2].data, str(1))
-        self.assertEqual(instructions[2].mnemonic, TokenType.ADD.name)
-        self.assertEqual(instructions[3].data, str(0))
-        self.assertEqual(instructions[3].mnemonic, TokenType.JMP.name)
+        # (expected_mnemonic, expected_operand)
+        expected = [
+            (TokenType.JMP.name, 1),
+            (TokenType.LOAD.name, str(1)),
+            (TokenType.ADD.name, str(1)),
+            (TokenType.JMP.name, str(0))
+        ]
+
+        self.assertEqual(len(instructions), len(expected), "Instruction count mismatch")
+
+        for index, (expected_mnemonic, expected_operand) in enumerate(expected):
+            with self.subTest(index):
+                self.assertEqual(instructions[index].mnemonic, expected_mnemonic)
+                self.assertEqual(instructions[index].data, expected_operand)
 
     def test_multiple_labels(self):
         source = """
