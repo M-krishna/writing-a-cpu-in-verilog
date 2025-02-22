@@ -3,7 +3,7 @@
 import sys
 from scanner import Scanner
 from parser import Parser
-from code_generator import CodeGenerator
+from code_generator import CodeGenerator, FileType
 
 if __name__ == "__main__":
 
@@ -26,3 +26,5 @@ if __name__ == "__main__":
     code_generator = CodeGenerator(parser.get_instructions)
     code_generator.generate_binary_code()
     code_generator.generate_hex_code()
+    code_generator.write_to_file(FileType.BINARY_FILE)
+    code_generator.write_to_file(FileType.HEX_FILE)
