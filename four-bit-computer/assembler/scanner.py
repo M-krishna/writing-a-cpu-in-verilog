@@ -34,7 +34,6 @@ class Scanner:
 
         token_dict: dict = {
             ";": lambda: self.handle_semicolon(),
-            ":": lambda: self.handle_colon()
         }
 
         try:
@@ -45,15 +44,6 @@ class Scanner:
 
     def add_token(self, token: Token):
         self.tokens.append(token)
-
-    def handle_colon(self):
-        text: str = self.source[self.start_position:self.current_position]
-        token: Token = Token(
-            TokenType.COLON.name,
-            lexeme=text,
-            line=self.line
-        )
-        self.add_token(token)
 
     def handle_semicolon(self):
         while (self.peek() != "\n" and not self.is_at_end()):
@@ -104,7 +94,7 @@ class Scanner:
         return c >= '0' and c <= '9'
 
     def isAlpha(self, c: str) -> bool:
-        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c == "_")
+        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c == "_") or (c == ":")
 
     def isAlphaNumeric(self, c: str) -> bool:
         return self.isDigit(c) or self.isAlpha(c)
