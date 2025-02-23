@@ -54,3 +54,11 @@ class CodeGenerator:
         with open(file, "w") as f:
             for instruction in instructions:
                 f.write(str(instruction) + "\n")
+
+    @property
+    def get_binary_code_instruction(self):
+        return self.binary_code
+
+    @property
+    def get_hex_code_instructions(self):
+        return self.hex_code

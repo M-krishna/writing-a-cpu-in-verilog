@@ -84,7 +84,7 @@ class TestParser(unittest.TestCase):
         instructions: List[Instruction] = parser.get_instructions
 
         expected = [
-            Instruction(TokenType.JMP.name, 4),
+            Instruction(TokenType.JMP.name, 4), # This is wrong. TODO: it shouldn't be 4
             Instruction(TokenType.LOAD.name, str(1)),
             Instruction(TokenType.ADD.name, str(1)),
             Instruction(TokenType.JMP.name, str(0)),
