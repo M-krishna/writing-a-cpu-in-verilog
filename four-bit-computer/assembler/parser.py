@@ -24,9 +24,14 @@ class Parser:
         if mnemonic not in self.MNEMONICS:
             raise SyntaxError(f"Unknown mnemonic: {mnemonic} at line number: {current_token.line}")
 
-        # Right after the mnemonic we should have a number (data)
-        current_token: Token = self.advance()
-        operand: int = int(current_token.lexeme)
+        # If the mnemonic is HLT, it doesn't require an operand
+        # So we have to set a default operand
+        if mnemonic == TokenType.HLT.value:
+            operand = 0
+        else:
+            # Right after the mnemonic we should have a number (data)
+            current_token: Token = self.advance()
+            operand: int = int(current_token.lexeme)
 
         # For the JMP instruction, the value of the operand can be from 0 to 15
         # For the remaining instructions, the value of the operand will be either 0 or 1
