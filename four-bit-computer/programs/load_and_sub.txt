@@ -1,0 +1,4 @@
+LOAD 1 ; loads 1 into the accumulator
+SUB 1 ; subtracts 1 from the value in the accumulator
+
+; The result should equal to 0

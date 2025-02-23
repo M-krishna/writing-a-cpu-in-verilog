@@ -1,0 +1,5 @@
+; write a program to increment number starting from 1
+
+LOAD 1
+ADD 1
+JMP 1

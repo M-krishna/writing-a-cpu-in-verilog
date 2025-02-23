@@ -1,0 +1,10 @@
+; Code skipping
+JMP 3 ; jumps to address 3
+
+LOAD 0
+ADD 0
+
+; At address 3
+LOAD 1
+ADD 1
+HLT

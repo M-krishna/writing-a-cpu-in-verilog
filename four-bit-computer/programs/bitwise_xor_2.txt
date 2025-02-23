@@ -1,0 +1,4 @@
+LOAD 1
+XOR 1
+
+; the result should equal to 0

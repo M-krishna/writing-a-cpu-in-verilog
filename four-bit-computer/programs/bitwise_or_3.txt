@@ -1,0 +1,4 @@
+LOAD 0
+OR 0
+
+; the result should equal to 0

@@ -8,14 +8,3 @@
 LOAD 1  ; loads 1 into accumulator (register A)
 ADD 1   ; adds 1 to accumulator and stores it in accumulator (2 is the value of the accumulator now)
 JMP 1   ; jumps to address 1
-
-
-
-; Implementing labels in my assembly
-
-;JMP TEST_1
-
-;TEST_1:
-;    LOAD 1
-;    ADD 1
-;    JMP 1

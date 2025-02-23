@@ -1,0 +1,4 @@
+LOAD 1 ; Loads 1 in to the accumulator
+ADD 1 ; adds the value 1 to the accumulator value
+
+; Finally the result should equal to 2
