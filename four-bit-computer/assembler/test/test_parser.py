@@ -82,7 +82,23 @@ class TestParser(unittest.TestCase):
         parser.parse_tokens()
 
         instructions: List[Instruction] = parser.get_instructions
-        print(instructions)
+
+        expected = [
+            Instruction(TokenType.JMP.name, 4),
+            Instruction(TokenType.LOAD.name, str(1)),
+            Instruction(TokenType.ADD.name, str(1)),
+            Instruction(TokenType.JMP.name, str(0)),
+            Instruction(TokenType.LOAD.name, str(1)),
+            Instruction(TokenType.ADD.name, str(1)),
+            Instruction(TokenType.ADD.name, str(1))
+        ]
+
+        self.assertEqual(len(instructions), len(expected), "Instructions count mismatch")
+
+        for index, expected_instruction in enumerate(expected):
+            with self.subTest(index):
+                self.assertEqual(instructions[index].mnemonic, expected_instruction.mnemonic)
+                self.assertEqual(instructions[index].data, expected_instruction.data)
 
 if __name__ == "__main__":
     unittest.main()
