@@ -28,7 +28,11 @@ class Parser:
         current_token: Token = self.advance()
         operand: int = int(current_token.lexeme)
 
-        if operand not in [0, 1]:
+        # For the JMP instruction, the value of the operand can be from 0 to 15
+        # For the remaining instructions, the value of the operand will be either 0 or 1
+        if mnemonic == TokenType.JMP.value and (operand < 0 or operand > 15):
+            raise SyntaxError(f"Unknown operand: {operand} at line number: {current_token.line} for JMP instruction")
+        elif (operand not in [0, 1]) and not (mnemonic == TokenType.JMP.value):
             raise SyntaxError(f"Unknown operand: {operand} at line number: {current_token.line}")
 
         return Instruction(mnemonic, operand)
