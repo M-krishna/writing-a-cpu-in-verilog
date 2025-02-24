@@ -1,0 +1,10 @@
+; this is a comment
+LOAD 1
+ADD 1
+SUB 0
+AND 1
+OR 0
+XOR 1
+LOAD 0
+JMP 1
+HLT
