@@ -1,10 +1,8 @@
 name: 4-bit CPU tests
 on:
   push:
-    branches:
-      main
     paths:
-      - 'four-bit-computer/**'
+      - four-bit-computer/**
 
 jobs:
   test-scanner:
