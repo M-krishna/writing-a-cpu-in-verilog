@@ -1,0 +1,28 @@
+# Initial CI setup for running tests
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  assembler_test:
+    runs_on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Run tests for scanner
+      run: |
+        cd four-bit-computer/assembler
+        python -m test.test_scanner.py
