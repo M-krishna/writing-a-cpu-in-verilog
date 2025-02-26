@@ -53,7 +53,7 @@ class Scanner:
             self.advance()
 
     def handle_comma(self):
-        c: str = self.advance()
+        self.advance()
         text: str = self.source[self.start_position:self.current_position]
         token: Token = Token(
             TokenType.COMMA.name, text, self.line
