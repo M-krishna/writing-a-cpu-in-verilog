@@ -2,7 +2,7 @@
 
 import sys
 from scanner import Scanner
-# from parser import Parser
+from parser import Parser
 # from code_generator import CodeGenerator, FileType
 
 if __name__ == "__main__":
@@ -22,8 +22,8 @@ if __name__ == "__main__":
     for token in scanner.get_tokens:
         print(token)
 
-    # parser = Parser(scanner.get_tokens)
-    # parser.parse_tokens()
+    parser = Parser(scanner.get_tokens)
+    parser.parse_tokens()
 
     # code_generator = CodeGenerator(parser.get_instructions)
     # code_generator.generate_binary_code()

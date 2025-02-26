@@ -9,9 +9,9 @@ module cpu(
     reg [7:0] pc;
 
     // Instruction memory
-    // Instruction format => 0000 0000 => 8 bits
-    // First 3 bits starting from MSB is used for Opcode
-    // The next 5 bits are used for data (immediate value)
+    // First 3 bits are used for opcode, starting from MSB
+    // The next bit is used for mode, it is to decide whether are next bits are immediate value or register
+    // The last 4 bits can be either an immediate value or register
     reg [7:0] instruction_memory [0:255];
 
     // Fetch and Decode
@@ -20,13 +20,32 @@ module cpu(
     assign current_instruction = instruction_memory[pc]; // Fetch the current instruction
 
     wire [2:0] opcode;
-    wire [4:0] data;
+    wire mode;  // Used to decide whether the next four bits are immediate value or registers
+    wire [3:0] op_field;  // either immediate value or register
 
     // Decode the current instruction
     assign opcode = current_instruction[7:5];
-    assign data = current_instruction[4:0];
+    assign mode = current_instruction[4];
+    assign op_field = current_instruction[3:0];
 
-    reg [7:0] register_A; // Our accumulator/register
+    // Signals for Register file
+    reg write_enable;
+    reg write_address;
+    reg [7:0] write_data;
+    reg read_select;
+    wire [7:0] read_data;
+
+    // Initialize Register file module
+    regfile _regfile(
+      .we(write_enable),
+      .waddr(write_address),
+      .wdata(write_data),
+      .rsel(read_select),
+      .rdata(read_data)  
+    );
+
+    reg [7:0] r0; // register 0
+    reg [7:0] r1; // register 1
 
     // Signals for ALU
     reg [7:0] operand_A;

@@ -14,6 +14,8 @@ class TokenType(Enum):
 
     # Others
     NUMBER      = "NUMBER"
+    IDENTIFIER  = "IDENTIFIER"
     SEMICOLON   = "SEMICOLON"
     COLON       = "COLON"
+    COMMA       = "COMMA"
     EOF         = "EOF"

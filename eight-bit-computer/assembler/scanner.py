@@ -33,7 +33,8 @@ class Scanner:
         c: str = self.advance()
 
         token_dict: dict = {
-            ";": lambda: self.handle_semicolon()
+            ";": lambda: self.handle_semicolon(),
+            ",": lambda: self.handle_comma()
         }
 
         try:
@@ -49,7 +50,14 @@ class Scanner:
         # This function is to ignore the comment in the code.
         while (self.peek() != "\n" and not self.is_at_end()):
             self.advance()
-        # self.line += 1 # tracks the line of comments as well
+
+    def handle_comma(self):
+        c: str = self.advance()
+        text: str = self.source[self.start_position:self.current_position]
+        token: Token = Token(
+            TokenType.COMMA.name, text, self.line
+        )
+        self.add_token(token)
 
     def default_case(self, c: str):
         if self.isDigit(c):
@@ -71,13 +79,23 @@ class Scanner:
         self.add_token(token)
 
     def string(self):
-        while (self.isAlpha(self.peek())):
+        while (self.isAlphaNumeric(self.peek())):
             self.advance()
         text: str = self.source[self.start_position:self.current_position]
         # check if a keyword
-        keyword: str = self.KEYWORDS.get(text)
+        keyword: str = self.KEYWORDS.get(text, None)
+        if not keyword: # then it must be an identifier
+            self.handle_identifier()
+        else:
+            token: Token = Token(
+                keyword, text, self.line
+            )
+            self.add_token(token)
+
+    def handle_identifier(self):
+        text: str = self.source[self.start_position:self.current_position]
         token: Token = Token(
-            keyword, text, self.line
+            TokenType.IDENTIFIER.name, text, self.line
         )
         self.add_token(token)
 
@@ -93,6 +111,9 @@ class Scanner:
 
     def isAlpha(self, c: str) -> bool:
         return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c == "_")
+
+    def isAlphaNumeric(self, c: str) -> bool:
+        return self.isDigit(c) or self.isAlpha(c)
 
     def peek(self) -> str:
         if self.is_at_end(): return '\0'

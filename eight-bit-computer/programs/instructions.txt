@@ -1,10 +1,21 @@
 ; this is a comment
-LOAD 1
-ADD 1
-SUB 0
-AND 1
-OR 0
-XOR 1
-LOAD 0
-JMP 1
-HLT
+
+
+; Our 8-bit CPU currently supports 2 registers R0 and R1
+; Our mnemonic now takes 2 operands, expect two.
+; JMP takes one operand and HLT takes 0 operand.
+; Example for few mnemonics
+
+LOAD R0, R1 ; this imples R0 = R1
+ADD R0, R1  ; this imples R0 = R0 + R1
+SUB R0, R1  ; this imples R0 = R0 - R1
+
+; so the syntax is => <mnemonic> <destination_register> <source_register> (if at all the operand is a register)
+
+;; we can also do something like this:
+
+LOAD R1, 1
+LOAD R0, 10
+
+ADD R1, 10
+ADD R0, 12
