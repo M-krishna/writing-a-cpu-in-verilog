@@ -97,7 +97,7 @@ class Scanner:
         text: str = self.source[self.start_position:self.current_position]
         # The text can be either an identifier or a label
         # What is a label? (check the language grammar)
-        if re.search(r":$", text):
+        if re.match(r".*:$", text):
             token: Token = Token(
                 TokenType.LABEL.name, text, self.line
             )

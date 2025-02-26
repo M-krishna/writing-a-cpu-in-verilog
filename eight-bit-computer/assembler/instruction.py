@@ -1,7 +1,13 @@
 class Instruction:
-    def __init__(self, mnemonic: str, data: str, address: int = 0):
+    def __init__(self,
+                mnemonic: str,
+                operand_1: str = None,
+                operand_2: str = None,
+                address: int = 0
+                ):
         self.mnemonic = mnemonic
-        self.data = data
+        self.operand_1 = operand_1
+        self.operand_2 = operand_2
         self.address = address
 
     def __repr__(self):

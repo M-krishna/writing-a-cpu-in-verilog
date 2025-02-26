@@ -17,5 +17,6 @@ class TestScanner(unittest.TestCase):
             OR R0, 4
             XOR R0, R1
             XOR R1, 2
+            JMP
             HLT
         """

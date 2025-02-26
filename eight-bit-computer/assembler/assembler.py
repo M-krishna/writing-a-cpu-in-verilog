@@ -19,8 +19,6 @@ if __name__ == "__main__":
 
     scanner = Scanner(source)
     scanner.scan_tokens()
-    for token in scanner.get_tokens:
-        print(token)
 
     parser = Parser(scanner.get_tokens)
     parser.parse_tokens()
