@@ -1,3 +1,4 @@
+import re
 from typing import List, Callable
 from token_type import TokenType
 from token_internal import Token
@@ -41,7 +42,7 @@ class Scanner:
             fn: Callable = token_dict.get(c, lambda: self.default_case(c))
             fn()
         except:
-            raise Exception(f"Unknown token/character {c}")
+            raise Exception(f"Unknown token/character: {c}")
 
     def add_token(self, token: Token):
         self.tokens.append(token)
@@ -84,19 +85,26 @@ class Scanner:
         text: str = self.source[self.start_position:self.current_position]
         # check if a keyword
         keyword: str = self.KEYWORDS.get(text, None)
-        if not keyword: # then it must be an identifier
-            self.handle_identifier()
+        if not keyword: # then it must be an identifier or a label
+            self.handle_identifier_or_label()
         else:
             token: Token = Token(
                 keyword, text, self.line
             )
             self.add_token(token)
 
-    def handle_identifier(self):
+    def handle_identifier_or_label(self):
         text: str = self.source[self.start_position:self.current_position]
-        token: Token = Token(
-            TokenType.IDENTIFIER.name, text, self.line
-        )
+        # The text can be either an identifier or a label
+        # What is a label? (check the language grammar)
+        if re.search(r":$", text):
+            token: Token = Token(
+                TokenType.LABEL.name, text, self.line
+            )
+        else:
+            token: Token = Token(
+                TokenType.IDENTIFIER.name, text, self.line
+            )
         self.add_token(token)
 
     #################### HELPER FUNCTIONS #####################
@@ -110,7 +118,7 @@ class Scanner:
         return (c >= '0') and (c <= '9')
 
     def isAlpha(self, c: str) -> bool:
-        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c == "_")
+        return (c >= 'a' and c <= 'z') or (c >= 'A' and c <= 'Z') or (c == "_") or (c == ":")
 
     def isAlphaNumeric(self, c: str) -> bool:
         return self.isDigit(c) or self.isAlpha(c)

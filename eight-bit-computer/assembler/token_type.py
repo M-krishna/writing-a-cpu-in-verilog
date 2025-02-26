@@ -18,4 +18,5 @@ class TokenType(Enum):
     SEMICOLON   = "SEMICOLON"
     COLON       = "COLON"
     COMMA       = "COMMA"
+    LABEL       = "LABEL"
     EOF         = "EOF"
