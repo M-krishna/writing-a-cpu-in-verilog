@@ -85,3 +85,8 @@ This allows the CPU to use decoders and multiplexers to select which register to
 
 <number> ::= <digit> { <digit> }
 ```
+
+28th Feb 2025
+---
+- Need to add support for labels in the Parser
+- Implement code generation feature
