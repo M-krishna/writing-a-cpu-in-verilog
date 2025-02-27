@@ -1,8 +1,10 @@
+from token_internal import Token
+
 class Instruction:
     def __init__(self,
                 mnemonic: str,
-                operand_1: str = None,
-                operand_2: str = None,
+                operand_1: str | Token = None,
+                operand_2: str | Token = None,
                 address: int = 0
                 ):
         self.mnemonic = mnemonic
@@ -11,4 +13,4 @@ class Instruction:
         self.address = address
 
     def __repr__(self):
-        return f"Instruction({self.mnemonic}, {self.data}, {self.address})"
+        return f"Instruction({self.mnemonic}, {self.operand_1}, {self.operand_2}, {self.address})"

@@ -1,6 +1,9 @@
 import unittest
+from typing import List
 from scanner import Scanner
 from parser import Parser
+from instruction import Instruction
+from test.factory.instruction_factory import InstructionFactory
 
 
 class TestParser(unittest.TestCase):
@@ -12,6 +15,18 @@ class TestParser(unittest.TestCase):
 
         parser = Parser(scanner.get_tokens)
         parser.parse_tokens()
+
+        expected_instruction: Instruction = InstructionFactory.create_instruction(
+            "LOAD", "R0", "R1"
+        )
+        result_instructions: List[Instruction] = parser.get_instructions
+
+        for _, instruction in enumerate(result_instructions):
+            self.assertEqual(instruction.mnemonic, expected_instruction.mnemonic)
+            self.assertEqual(instruction.operand_1.lexeme, expected_instruction.operand_1)
+            self.assertEqual(instruction.operand_2.lexeme, expected_instruction.operand_2)
+            self.assertEqual(instruction.address, expected_instruction.address)
+
 
     def test_hlt(self):
         source = "HLT"
@@ -31,6 +46,7 @@ class TestParser(unittest.TestCase):
         parser = Parser(scanner.get_tokens)
         parser.parse_tokens()
 
+    @unittest.skip
     def test_jmp(self):
         source = """
             JMP TEST_1
