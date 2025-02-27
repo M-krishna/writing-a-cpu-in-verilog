@@ -56,7 +56,7 @@ class Scanner:
         self.advance()
         text: str = self.source[self.start_position:self.current_position]
         token: Token = Token(
-            TokenType.COMMA.name, text, self.line
+            TokenType.COMMA.name, text.strip(), self.line
         )
         self.add_token(token)
 
