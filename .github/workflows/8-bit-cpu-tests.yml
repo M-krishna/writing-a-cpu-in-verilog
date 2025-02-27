@@ -1,0 +1,30 @@
+name: 4-bit CPU tests
+on:
+  push:
+    paths:
+      - eight-bit-computer/**
+
+jobs:
+  test-scanner:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+      - run: echo "The ${{ github.repository }} has been cloned to the runner"
+
+      - name: Test Scanner
+        run: |
+          cd eight-bit-computer/assembler
+          python -m test.test_scanner
+
+  test-parser:
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout repository code
+            uses: actions/checkout@v4
+          - run: echo "The ${{ github.repository }} has been cloned to the runner"
+
+          - name: Test Parser
+            run: |
+              cd eight-bit-computer/assembler
+              python -m test.test_parser
