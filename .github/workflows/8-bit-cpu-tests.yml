@@ -1,6 +1,8 @@
 name: 8-bit CPU tests
 on:
   push:
+    branches:
+      - main
     paths:
       - eight-bit-computer/**
 
