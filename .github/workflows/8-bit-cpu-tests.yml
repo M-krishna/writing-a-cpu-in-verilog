@@ -1,4 +1,4 @@
-name: 4-bit CPU tests
+name: 8-bit CPU tests
 on:
   push:
     paths:
