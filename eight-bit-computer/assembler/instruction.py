@@ -1,4 +1,11 @@
 from token_internal import Token
+from typing import NamedTuple
+
+class InstructionToken(NamedTuple):
+    mnemonic        : Token
+    operand_1       : Token
+    operand_2       : Token
+    location_counter:   int
 
 class Instruction:
     def __init__(self,

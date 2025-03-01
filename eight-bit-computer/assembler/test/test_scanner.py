@@ -99,6 +99,24 @@ class TestScanner(unittest.TestCase):
             with self.subTest(i):
                 self.assertEqual(expected_tokens[i].tt, t.tt)
                 self.assertEqual(expected_tokens[i].lexeme, t.lexeme)
+    
+    def test_two_labels(self):
+        source = """
+            JMP TEST_1
+
+            TEST_1:
+                LOAD R0, 1
+                ADD R1, R0
+                HLT
+
+            TEST_2:
+                HLT
+        """
+
+        scanner = Scanner(source)
+        scanner.scan_tokens()
+        for s in scanner.get_tokens:
+            print(s)
 
 
 if __name__ == "__main__":

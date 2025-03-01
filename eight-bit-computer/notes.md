@@ -90,3 +90,24 @@ This allows the CPU to use decoders and multiplexers to select which register to
 ---
 - Need to add support for labels in the Parser
 - Implement code generation feature
+
+### How would you implement first pass and second pass?
+
+First question we need to ask is, why do we need first and second pass? For example, let take a program:
+```
+JMP TEST_1
+
+TEST_1:
+    LOAD R0, 1
+    LOAD R1, 10
+    ADD R0, R1
+    HLT
+```
+
+From the above program we can see that, the operand of the `JMP` instruction is a label reference. While going through the source code, we don't know whether this label is being implemented in the code or not.
+
+Here is where the **first pass** comes in. In the first pass, we scan through the source code, if we come across any label, we store it in a dictionary. If we take our example code, when we comes across this label `TEST_1:`, we store the location of that label as the value in a dictionary like `{"TEST_1": 1}`. We keep doing this until the end of the source code.
+
+Now comes the **second pass**. In second pass, we again go through the source code, but this time **we resolve the label reference**. For example, in the above code, when we come across `JMP TEST_1`, we replace `TEST_1` with the value present in the dictionary.
+
+This will be helpful during the code generation part
