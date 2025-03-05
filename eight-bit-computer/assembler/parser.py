@@ -20,9 +20,6 @@ class Parser:
     def parse_tokens(self):
         self.first_pass()
         self.second_pass()
-        # while not self.is_at_end():
-        #     instruction: Instruction = self.parse_instruction()
-        #     self.instructions.append(instruction)
 
     def parse_instruction(self) -> InstructionToken:
         mnemonic: Token = self.parse_mnemonic()
@@ -102,8 +99,39 @@ class Parser:
                 self.location_counter += 1
 
     def second_pass(self):
-        for mnemonic, operand_1, operand_2, location_counter in self.instruction_token:
-            print(mnemonic, operand_1, operand_2, location_counter)
+        # Resolve the label reference
+        # If the IDENTIFIER is not in the Register array, then it is a label reference
+        # TODO: Seperate IDENTIFIER and REGISTER token type
+        for mnemonic_token, operand_1, operand_2, location_counter in self.instruction_token:
+            mnemonic = mnemonic_token.lexeme
+            operand1 = None
+            operand2 = None
+            # For JMP instruction there will be only one operand (operand_1)
+            # operand_1 can be either a label reference or a direct address
+            # First check whether it is a label reference or not
+            if mnemonic == TokenType.JMP.name:
+                operand1 = self.resolve_operand(operand_1, is_jmp=True)
+            else:
+                if operand_1:
+                    operand1 = self.resolve_operand(operand_1)
+                if operand_2:
+                    operand2 = self.resolve_operand(operand_2)
+            instruction: Instruction = Instruction(
+                mnemonic, operand1, operand2, location_counter
+            )
+            self.instructions.append(instruction)
+
+    def resolve_operand(self, operand: Token, is_jmp: bool = False):
+        if operand.tt == TokenType.NUMBER.name:
+            return operand.lexeme
+        current_operand: str = operand.lexeme
+        if is_jmp:
+            if current_operand in self.REGISTERS:
+                raise SyntaxError(f"The value {current_operand} is not a label reference")
+            if current_operand not in self.symbol_table:
+                raise SyntaxError(f"Unable to resolve reference for {current_operand}")
+            return self.symbol_table.get(current_operand)
+        return current_operand
 
     ############### HELPER METHODS ###############
     def isNumber(self, operand: str) -> bool:

@@ -111,3 +111,10 @@ Here is where the **first pass** comes in. In the first pass, we scan through th
 Now comes the **second pass**. In second pass, we again go through the source code, but this time **we resolve the label reference**. For example, in the above code, when we come across `JMP TEST_1`, we replace `TEST_1` with the value present in the dictionary.
 
 This will be helpful during the code generation part
+
+
+Using Multiformat instructions
+---
+Since our assembly language instructions now takes two operands(for most instructions), there are more than one format of instructions. For example, we might use one format when both the operands are registers (Format R) and a different one when the second one is immediate (Format I).
+
+Also JMP and HLT may use their own formats (Format J and H)

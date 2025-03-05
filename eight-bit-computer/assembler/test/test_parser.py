@@ -49,7 +49,6 @@ class TestParser(unittest.TestCase):
         self.assertEqual(result_instruction[0].operand_1, None)
         self.assertEqual(result_instruction[0].operand_2, None)
 
-    @unittest.skip
     def test_load_with_numbers(self):
         source = "LOAD R0, 1"
 
@@ -65,8 +64,8 @@ class TestParser(unittest.TestCase):
         )
 
         self.assertEqual(result_instructions[0].mnemonic, expected_instruction.mnemonic)
-        self.assertEqual(result_instructions[0].operand_1.lexeme, expected_instruction.operand_1)
-        self.assertEqual(result_instructions[0].operand_2.lexeme, expected_instruction.operand_2)
+        self.assertEqual(result_instructions[0].operand_1, expected_instruction.operand_1)
+        self.assertEqual(result_instructions[0].operand_2, expected_instruction.operand_2)
 
     def test_jmp(self):
         source = """
@@ -88,9 +87,20 @@ class TestParser(unittest.TestCase):
         parser.parse_tokens()
 
         result_instructions: List[Instruction] = parser.get_instructions
-        # expected instructions
-        jmp_instruction: Instruction = InstructionFactory.create_instruction("JMP", "TEST_1")
 
+        # expected instructions
+        jmp_instruction: Instruction = InstructionFactory.create_instruction("JMP", 1)
+        load_instruction: Instruction = InstructionFactory.create_instruction("LOAD", "R0", str(1))
+        add_instruction: Instruction = InstructionFactory.create_instruction("ADD", "R1", "R0")
+        hlt_instruction: Instruction = InstructionFactory.create_instruction("HLT")
+
+        expected_instructions: List[Instruction] = [jmp_instruction, load_instruction, add_instruction, hlt_instruction, hlt_instruction]
+
+        for index, instruction in enumerate(result_instructions):
+            with self.subTest(index):
+                self.assertEqual(instruction.mnemonic, expected_instructions[index].mnemonic)
+                self.assertEqual(instruction.operand_1, expected_instructions[index].operand_1)
+                self.assertEqual(instruction.operand_2, expected_instructions[index].operand_2)
 
 if __name__ == "__main__":
     unittest.main()

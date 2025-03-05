@@ -3,7 +3,7 @@
 import sys
 from scanner import Scanner
 from parser import Parser
-# from code_generator import CodeGenerator, FileType
+from code_generator import CodeGenerator
 
 if __name__ == "__main__":
 
@@ -23,8 +23,10 @@ if __name__ == "__main__":
     parser = Parser(scanner.get_tokens)
     parser.parse_tokens()
 
-    # code_generator = CodeGenerator(parser.get_instructions)
-    # code_generator.generate_binary_code()
+    code_generator = CodeGenerator(parser.get_instructions)
+    code_generator.generate_binary_code()
+    for code in code_generator.get_binary_instructions():
+        print(code)
     # code_generator.generate_hex_code()
     # code_generator.write_to_file(FileType.BINARY_FILE)
     # code_generator.write_to_file(FileType.HEX_FILE)

@@ -31,5 +31,5 @@ XOR R1, 2
 HLT
 
 TEST_1:
-    LOAD R1, 1
+    LOAD R1, R0
     ADD R1, 10
