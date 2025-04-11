@@ -20,32 +20,31 @@ module cpu(
     assign current_instruction = instruction_memory[pc]; // Fetch the current instruction
 
     wire [2:0] opcode;
-    wire mode;  // Used to decide whether the next four bits are immediate value or registers
+    wire       mode;  // Used to decide whether the next four bits are immediate value or registers
     wire [3:0] op_field;  // either immediate value or register
 
     // Decode the current instruction
-    assign opcode = current_instruction[7:5];
-    assign mode = current_instruction[4];
+    assign opcode   = current_instruction[7:5];
+    assign mode     = current_instruction[4];
     assign op_field = current_instruction[3:0];
 
     // Signals for Register file
-    reg write_enable;
-    reg write_address;
-    reg [7:0] write_data;
-    reg read_select;
-    wire [7:0] read_data;
+    reg         write_enable;
+    reg         write_address;
+    reg [7:0]   write_data;
+    reg         read_select;
+    wire [7:0]  read_data;
 
     // Initialize Register file module
     regfile _regfile(
+      .clk(clk),
+      .reset(reset),
       .we(write_enable),
       .waddr(write_address),
       .wdata(write_data),
       .rsel(read_select),
       .rdata(read_data)  
     );
-
-    reg [7:0] r0; // register 0
-    reg [7:0] r1; // register 1
 
     // Signals for ALU
     reg [7:0] operand_A;
@@ -61,6 +60,7 @@ module cpu(
         .result(alu_result)
     );
 
+    reg [7:0] register_A;
     assign output_data = register_A;
 
     // Get the program instructions for an instruction file
@@ -83,7 +83,17 @@ module cpu(
             register_A <= 8'b0;
         end else begin
             case (opcode)
-                LOAD:   register_A <= data;
+                LOAD:   begin
+                    // check the mode bit (0 or 1)
+                    if (mode == 0) begin
+                        // Use the op_field as immediate value
+                        // First, zero-extend the op_field to 8 bits
+                        register_A <= {4'b0, op_field};
+                        // Second, write it to register
+                    end else begin
+                        // Use the op_field as register value
+                    end
+                end
                 ADD, SUB, AND, OR, XOR: begin
                     operand_A <= register_A;
                     operand_B <= {3'b0, data};

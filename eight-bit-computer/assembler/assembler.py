@@ -27,6 +27,9 @@ if __name__ == "__main__":
     code_generator.generate_binary_code()
     for code in code_generator.get_binary_instructions():
         print(code)
-    # code_generator.generate_hex_code()
+
+    code_generator.generate_hex_code()
+    for code in code_generator.get_hex_instructions():
+        print(code)
     # code_generator.write_to_file(FileType.BINARY_FILE)
     # code_generator.write_to_file(FileType.HEX_FILE)

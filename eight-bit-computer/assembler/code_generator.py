@@ -85,7 +85,15 @@ class CodeGenerator:
         return (mnemonic, operand_1, operand_2, address)
         
     def generate_hex_code(self):
-        pass
+        if self.is_binary_code_empty(): self.generate_binary_code()
+        for bin_code in self.binary_code:
+            self.hex_code.append(format(int(str(bin_code), 2), 'x'))
+
+    def is_binary_code_empty(self) -> bool:
+        return len(self.binary_code) > 0
 
     def get_binary_instructions(self):
         return self.binary_code
+
+    def get_hex_instructions(self):
+        return self.hex_code
