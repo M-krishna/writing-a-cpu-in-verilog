@@ -13,7 +13,10 @@ module cpu(
 
     wire [31:0] current_instruction;
 
+    // Fetch the current instruction
     assign current_instruction = instruction_memory[program_counter >> 2];
+
+    // Decode the current instruction
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin    // Asynchronous reset

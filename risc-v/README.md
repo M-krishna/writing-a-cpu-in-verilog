@@ -16,8 +16,8 @@ Variable-length instructions are computer instructions where different instructi
 Variable-length instructions are a characteristics of Complex-Instructions Set Computing (CISC) architectures like x86, while Reduced Instruction Set Computing (RISC) architectures typically use fixed-length instructions
 
 ## What is the difference between Instruction memory and Data memory?
-Instruction memory: Holds the program's instruction (code)
-Data memory: Stores the data that the program manipulates
+* **Instruction memory:** Holds the program's instruction (code)
+* **Data memory:** Stores the data that the program manipulates
 
 ## How can we fetch the current instruction using Program counter?
 * Our program counter is 32-bits or 4-bytes.
@@ -50,6 +50,71 @@ Here each instructions are *32-bits* or *4-bytes*. Our program counter starts at
 Previously I was under the impression that we should do `program_counter + 1`. This was wrong. Because since each of the instructions are 4-bytes long, we should increment the *program_counter* by *4 bytes* and not *1*.
 
 So we should do `program_counter <= program_counter + 4`
+
+## RISC-V Instruction Bit Fields
+All RISC_V instructions are 32 bits, numbered from 31(MSB) to 0 (LSB):
+
+```
+Bit Position: 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
+```
+
+### Common Fields Across All Formats:
+
+* Opcode [6:0] - Always bits 6-0
+```verilog
+wire [6:0] opcode = current_instruction[6:0];
+```
+
+* rd[11:7] - Destination register (when present)
+```verilog
+wire [4:0] rd = current_instruction[11:7];
+```
+
+* funct3[14:12] - Function field (when present)
+```verilog
+wire [2:0] funct3 = current_instruction[14:12];
+```
+
+* rs1[19:15] - Source register 1 (when present)
+```verilog
+wire [4:0] rs1 = current_instruction[19:15];
+```
+
+* rs2[24:20] - Source register 2 (when present)
+```verilog
+wire [4:0] rs2 = current_instruction[24:20];
+```
+
+* funct7[31:25] - Function field for R-type
+```verilog
+wire [6:0] funct7 = current_instruction[31:25];
+```
+
+### Format-Specific Immediate Fields:
+* I-Type Immediate [31:20]
+```verilog
+wire [11:0] imm_i = current_instruction[31:20];
+```
+
+* S-Type Immediate (split across two locations)
+```verilog
+wire [11:0] imm_s = {current_instruction[31:25], current_instruction[11:7]};
+```
+
+* B-Type Immediate (split and reordered)
+```verilog
+wire [12:0] imm_b = {current_instruction[31], current_instruction[7], current_instruction[30:25], current_instruction[11:8], 1'b0};
+```
+
+* U-Type Immediate [31:12]
+```verilog
+wire [19:0] imm_u = current_instruction[31:12];
+```
+
+* J-Type Immediate (split and reordered)
+```verilog
+wire [20:0] imm_j = {current_instruction[31], current_instruction[19:12], current_instruction[20], current_instruction[30:21], 1'b0};
+```
 
 
 ## What are all the available instruction formats in RISC-V?
