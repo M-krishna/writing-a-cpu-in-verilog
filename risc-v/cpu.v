@@ -5,7 +5,7 @@ module cpu(
 );
     reg [31:0] program_counter; // to hold the current address
 
-    reg [31:0] instruction_memory [0:1024]; // 1KB instruction memory
+    reg [31:0] instruction_memory [0:1023]; // 4KB instruction memory
 
     initial begin
         $readmemh("instruction.hex", instruction_memory);
@@ -13,7 +13,7 @@ module cpu(
 
     wire [31:0] current_instruction;
 
-    assign current_instruction = instruction_memory[program_counter];
+    assign current_instruction = instruction_memory[program_counter >> 2];
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin    // Asynchronous reset

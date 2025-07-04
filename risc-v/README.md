@@ -20,8 +20,23 @@ Instruction memory: Holds the program's instruction (code)
 Data memory: Stores the data that the program manipulates
 
 ## How can we fetch the current instruction using Program counter?
-
-
+* Our program counter is 32-bits or 4-bytes.
+```verilog
+reg [31:0] program_counter;
+```
+* Our instruction memory is 4KB (1024 bytes) and each instruction is 32-bits wide or 4-bytes wide;
+* This is how our *instruction memory* looks like:
+```verilog
+reg [31:0] instruction_memory [0:1023]; // 4KB in size
+```
+* At `instruction_memory[0]`, the first instruction would present.
+* At `instruction_memory[1]`, the second instruction would present. And so on.
+* Since we know that *instruction_memory* is index based (0, 1, 2, ...), we could do `instruction_memory[program_counter]`. Where the initial value of *program_counter* is 0 and at each clock cycle it *increments by 1*
+* But to depict the real CPU working, we should do something different.
+    * Instead of access the instruction memory as `instruction_memory[program_counter]`, we should do `instruction_memory[program_counter / 4]`.
+    * Why divide by 4? In this case, we have 32-bits (ie. 4 bytes) of instruction memory.
+    * Since the value of program counter is in bytes and the instruction memory is index based like 0, 1, 2, ... N.
+    * We are dividing the value of program counter by 4, to get the instructions from instruction memory.
 
 
 ## How to increment the program counter to fetch the instruction from instruction memory?
