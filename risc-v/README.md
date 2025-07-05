@@ -179,3 +179,141 @@ RISC-V has **6 main instruction formats**, each 32 bits wide but with different 
 **Used for:** JAL
 
 **Example:** `JAL x1, function` (jump and link)
+
+## What are Register Files?
+The **register file** is a small, fast memory inside the CPU that stores temporary data during instruction execution. Think of it as the CPU's workspace.
+
+### RISC-V Register File Specifications:
+* **32 registers** total (x0 through x31)
+* Each register is **32 bits wide** (for RV32I)
+* **x0 is special** - always contains 0 (hardwired)
+* **x1-x31** can store any 32-bit value
+
+### Why do we need it?
+**Example:** `ADD x1, x2, x3` (x1 = x2 + x3)
+
+1. **Read** x2 and x3 from register file
+2. **Send** those value to ALU
+3. **Get** result from ALU
+4. **Write** result back to x1 in register file
+
+### How should we decide how many bits are needed to address registers?
+* Let's say we have a registers array like this: `reg [31:0] registers [0:31]`, since we are building RISC-V CPU, we should have 2 read registers and 1 write register.
+* To fetch the correct register from the registers array, how many do we need for the read and write registers?
+* To calculate that, we can use the formula: `Number of bits = log(number of register) base 2`
+* In our case, we have 32 registers. So the number of bits = 5
+
+## Data signals and Control signals
+These are fundamental concepts in digital design.
+
+### Data Signals
+**Data signals** carry the actual information (number, addresses, etc.) between components.
+
+**In our Register file context**:
+* **Read data:** What values comes OUT of the registers when you read them.
+* **Write data:** What value goes INTO a register when you write to it.
+
+**Examples:**
+* `read_data1` - the 32 bit value from first register
+* `read_data2` - the 32 bit value from second register
+* `write_data` - the 32 bit value you want to store
+
+### Control Signals
+**Control signals** tell components WHEN and HOW to operate. They're like switches or commands.
+
+**In our Register file context:**
+* **Write Enable:** "Should I actually write, or just ignore the write inputs?"
+* **Clock:** "When should writing happen?"
+* **Reset:** "Should I clear registers?"
+
+**Examples:**
+* `write_enable` - 1 bit signal (1 = write, 0 = don't write)
+* `clk` - clock signal for timing
+* `reset` - 1 bit signal to clear everything
+
+### Why do we Need Both?
+**Data Without Control = Chaos**:
+* You provide `write_data`, but WHEN should it be written?
+* Without `write_enable`, it might write constantly!
+
+**Real Example:**
+```verilog
+// Data signals
+write_data = 43;            // What to write
+write_addr = 5;             // where to write
+
+// Control signals
+write_enable = 1;           // whether to write
+// On clock edge            // when to write
+```
+
+## Combinational Logic and Sequential Logic (in terms of registers)
+* **Combinational logic** (`always @(*)`) = immediate response, use `=`
+* **Sequential logic** (`always @(posedge clk)`) = wait for clock, use `<=`
+* **Register writes** are typically sequential in real CPUs
+
+## Signal Direction: Who Controls the Signal?
+* This is basically to understand which component drives the signal (like `wire` and `reg`).
+* Let's say we have a module like:
+```verilog
+module register_file(
+    input [4:0] read_addr1,
+    input [4:0] read_addr2,
+    input [4:0] write_addr,
+    input [31:0] write_data,
+    input write_enable,
+    input clk,
+    output [31:0] read_data1,
+    output [31:0] read_data2
+);
+endmodule
+```
+* In the above code, the inputs and outputs mentioned are `wire` signal by default.
+* And we write a testbench to test the above module. In the testbench, we need to define the signals correctly for the module to get the correct data from the testbench. Here is how it looks:
+```verilog
+module register_file_tb;
+    reg [4:0] read_addr1;
+    reg [4:0] read_addr2;
+    reg [4:0] write_addr;
+    reg [31:0] write_data;
+    reg write_enable;
+    reg clk;
+    wire [31:0] read_data1;
+    wire [31:0] read_data2;
+endmodule
+```
+* Why `clk`, `read_addr`, `read_addr2`, `write_addr`, `write_data`, `write_enable` is defined as `reg` signal type and `read_data1` and `read_data2` are defined as `wire` signal type? Lets look at that:
+    * Why `reg` signal type for `clk` and other mentioned ones?
+        * **Testbench generates** the clock signal
+        * **Testbench drives** `clk` into the module
+        * In testbench, **you control** when `clk` changes
+        * `reg` = "I (testbench) am driving the signal"
+    * Why `wire` signal type for `read_data1` and `read_data2`?
+        * **Register file module outputs** these signals
+        * **Module drives** the data to testbench
+        * **Testbench receives** the data (doesn't control it)
+        * `wire` = "The module is driving this signal to me"
+
+### Signal Direction Rule:
+| Signal Type | Direction | Testbench Declaration |
+|-------------|-----------|-----------------------|
+| Inputs to module | Testbench -> Module | `reg` |
+| Outputs from module | Module -> Testbench | `wire` |
+
+**Think of it like:**
+* `reg` = "I have a remote control for this"
+* `wire` = "I'm just watching what comes out"
+
+## Things I have done so far
+Logging my journey here.
+
+### 04-07-2025
+* Implemented the base cpu module with the following
+    * Created a program counter
+    * Created an instruction memory
+    * Fetching the instruction from instruction memory
+    * Updating the program counter synchronously
+    * Decode the instruction (Asynchronously)
+
+### 05-07-2025
+* Implemented Register files (register_file.v)
