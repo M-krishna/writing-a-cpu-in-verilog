@@ -304,6 +304,28 @@ endmodule
 * `reg` = "I have a remote control for this"
 * `wire` = "I'm just watching what comes out"
 
+## What is a Control Logic?
+Control logic is the "brain" of a CPU that decides what each component should do based on the current instruction.
+
+Control logic generates **control signals** that tell different parts of the CPU how to operate. Think of it as the conductor of an orchestra - it coordinates all the components to work together.
+
+### In our CPU context
+**Control logic takes:**
+* **opcode** (what type of instruction?)
+* **funct3/funct7** (specific operation details)
+
+**Control Logic Generates**:
+* **ALU operation code** (`alu_op`)
+* **Write enable** (`write_enable`)
+* **Multiplexer select signals**
+* **Data path control signals**
+
+### In our current code:
+Our `always @(*)` block in `cpu.v` is where our control logic will live. It needs to:
+* Look at the opcode
+* Decide what each component should do
+* Generate the appropriate control signals
+
 ## Things I have done so far
 Logging my journey here.
 
@@ -317,3 +339,5 @@ Logging my journey here.
 
 ### 05-07-2025
 * Implemented Register files (register_file.v)
+
+### 07-07-2025

@@ -33,6 +33,32 @@ module cpu(
     localparam LUI      = 7'b0110111;         // U-Type
     localparam JAL      = 7'b1101111;         // J-Type
 
+    // Add register file instance
+    wire [31:0] rs1_data; // Data from register rs1
+    wire [31:0] rs2_data; // Data from register rs2
+
+    register_file _rf(
+        .read_addr1(rs1),
+        .read_addr2(rs2),
+        .write_addr1(rd),
+        .write_data(),
+        .write_enable(),
+        .clk(clk),
+        read_data1(rs1_data),
+        read_data2(rs2_data)
+    );
+
+    // Add ALU instance
+    wire [31:0] alu_result;
+    wire [1:0] alu_op;
+
+    alu _alu(
+        .A(rs1_data),       // From register rs1
+        .B(),               // rs2_data or immediate value
+        .op(alu_op),        // Control signal
+        .out(alu_result)    // To write_data
+    );
+
     // PC Update logic (separate from instruction execution)
     always @(posedge clk or posedge reset) begin
         if (reset) begin    // Asynchronous reset
