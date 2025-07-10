@@ -1,0 +1,46 @@
+10-07-2025
+----------
+
+What is OP_IMM instruction? (Operation Immediate)
+=================================================
+* This kind of instruction deals with immediate values.
+* This is also called as I-Type (Immediate type) instruction
+* The instruction encoding looks like this:
+-----------------------------------------------------------------
+31           20  19     15  14          12  11      7  6       0
+-----------------------------------------------------------------
+   imm[11:0]        rs1         funct3          rd       opcode
+------------------------------------------------------------------
+
+* The opcode for "OP_IMM" instruction is "0010011" 
+* For example, we have an instruction like "ADDI x1, x2, 100"
+* If we decode the above instruction, we get the following:
+    * "funct3" contains the address for "ADDI"
+    * "100" resides in bits [31:20]
+    * "x1" is the destination register. This is where we write the result.
+    * The address of "x1" resides in bits [11:7]
+    * "x2" is the register where we get the other value from. The address of "x2" register
+    resides in bits [19:15]
+
+
+What is OP instruction? (Default Operation / Register Type)
+============================================================
+* This kind of instruction deals with register to register values.
+* This is also called R-Type (Register type) instruction
+* The instruction encoding for R-Type looks like this:
+--------------------------------------------------------------------------
+31          25  24      20  19      15  14      12  11      7   6       0
+---------------------------------------------------------------------------
+    funct7          rs2        rs1        funct3        rd        opcode
+---------------------------------------------------------------------------
+
+* The opcode for "OP" instruction is "0110011"
+* For example, we have an instruction like "ADD x1, x2, x3"
+* If we decode the above instruction, we get the following:
+    * "funct3" contains the address for "ADD"
+    * "x1" is the destination register. This is where we write the result.
+    * The address of "x1" resides in bits [11:7]
+    * "x2" is the first source register, which is "rs1". And the bits are [19:15]
+    * "x3" is the second source register, which is "rs2". And the bits are [24:20]
+* In this instruction, we get the value from "x2" and "x3", "add" them both and store the
+result in "x1"
