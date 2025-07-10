@@ -326,6 +326,54 @@ Our `always @(*)` block in `cpu.v` is where our control logic will live. It need
 * Decide what each component should do
 * Generate the appropriate control signals
 
+## OP_IMM Instruction overview
+`OP_IMM` (0010011) includes:
+* **ADDI** - ADD immediate
+* **ANDI** - AND immdiate
+* **ORI** - OR immediate
+* **XORI** - XOR immediate
+* **SLTI** - Set less than immediate
+* **SLTIU** - Set less than immediate unsigned
+
+### For OP_IMM, What should the Control Logic do?
+1. Extract the immediate value first:
+We need to get the 12-bit immediate from bits [31:20]:
+```verilog
+reg [11:0] imm_i = current_instruction[31:20];
+```
+2. Control signals for OP_IMM:
+Think about what each signal should be:
+* `write_enable`: should OP_IMM write to a register?
+* `alu_src` - should ALU use `rs2_data` or immediate
+* `reg_write_src`: What data should go to register file's write_data?
+* `alu_op` - How do you tell ALU which operation to perform
+3. ALU Operation Selection:
+For OP_IMM, the specific operation depends on `funct3`:
+* `funct3 = 000` -> ADDI (ADD)
+* `funct3 = 001` -> ANDI (AND)
+* `funct3 = 010` -> ORI (OR)
+* `funct3 = 100` -> XORI (XOR)
+* etc.
+
+### Questions to guide our implementation
+1. For `ADDI x1, x2, 100`:
+  * What should `write_enable` be?
+  * What should go into ALU's A input? (rs1_data or rs2_data)
+  * What should go into ALU's B input? (rs2_data or immediate)
+  * What should `write_data` in register file be?
+2. How do you extract and sign-extend the immediate?
+  * 12-bit immediate needs to become 32-bit
+  * Should negative immediates work correctly?
+3. How do you pass the right operation to ALU?
+  * Your ALU probably has operation codes like ADD, AND, OR
+  * How do you map `funct3` to your ALU's operation codes?
+
+09-07-2025
+---
+Man I don't understand shit on how to implement functionality for `OP_IMM`. I think I need to take one step at a time. What needs to be done? But first what is `OP_IMM`?
+
+`OP_IMM` stands for operation immediate, its part of instruction encoding, where we get the immediate value from the instruction.
+
 ## Things I have done so far
 Logging my journey here.
 
