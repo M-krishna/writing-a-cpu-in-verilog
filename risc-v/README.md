@@ -388,4 +388,5 @@ Logging my journey here.
 ### 05-07-2025
 * Implemented Register files (register_file.v)
 
-### 07-07-2025
+### 10-07-2025
+* Finished implementing `OP_IMM` functionality
