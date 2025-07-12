@@ -36,6 +36,7 @@ module cpu(
 
     // Immediate extraction (I-type)
     wire [31:0] imm_i = {{20{current_instruction[31]}}, current_instruction[31:20]}; // Sign extension
+    wire [31:0] imm_u = {current_instruction[31:12], 12'b0};
 
     // Instruction Types ( Common RV32I Opcodes )
     localparam OP_IMM   = 7'b0010011;         // I-Type (ADDI, ANDI, etc.)
@@ -50,6 +51,21 @@ module cpu(
     reg write_enable;
     reg [31:0] alu_b_input;
     reg [2:0] alu_op;
+    reg [1:0] write_data_src;
+    
+    // ============== WRITE DATA MULTIPLEXER =================
+    reg [31:0] write_data;
+
+    always @(*) begin
+        case (write_data_src)
+            2'b00: write_data = alu_result;
+            2'b01: write_data = imm_u;
+            2'b10: write_data = 32'b0;
+            2'b11: write_data = 32'b0;
+            default: write_data = 32'b0;
+        endcase
+    end
+
 
     // ============== REGISTER FILE =========================
     wire [31:0] rs1_data; // Data from register rs1
@@ -59,7 +75,7 @@ module cpu(
         .read_addr1(rs1),
         .read_addr2(rs2),
         .write_addr1(rd),
-        .write_data(alu_result),
+        .write_data(write_data),
         .write_enable(write_enable),
         .clk(clk),
         .read_data1(rs1_data),
@@ -84,22 +100,28 @@ module cpu(
         write_enable = 0;
         alu_b_input = 32'b0;
         alu_op = 3'b0;
+        write_data_src = 2'b0;
 
         case (opcode)
             OP_IMM: begin
                 write_enable = 1;
                 alu_b_input = imm_i;
                 alu_op = funct3;
+                write_data_src = 2'b0;
             end
             OP: begin
                 write_enable = 1;
                 alu_b_input = rs2_data;
                 alu_op = funct3;
+                write_data_src = 2'b0;
             end
             LOAD: begin end
             STORE: begin end
             BRANCH: begin end
-            LUI: begin end
+            LUI: begin
+                write_enable = 1;
+                write_data_src = 2'b01;
+            end
             JAL: begin end
             default: begin end
         endcase

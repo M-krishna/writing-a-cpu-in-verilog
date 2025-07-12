@@ -54,3 +54,16 @@ differentiate between "ADD" and "SUB" instruction.
 * There are totally 7 bits in "funct7". If the value of "funct7" is "0000000", then we
 should perform "ADD" instruction. If the value of "funct7" is "0100000", then we
 should perform "SUB" instruction.
+
+
+What is U-Type instruction? (Upper Immediate)
+=============================================
+* Lets first take a look at the instruction encoding format
+
+---------------------------------------------------------------
+31                                  12  11      7  6        0
+---------------------------------------------------------------
+        imm[31:12]                          rd       opcode
+---------------------------------------------------------------
+
+* Let's say we have an instruction like "LUI x1, 0x12345". What should it do?
