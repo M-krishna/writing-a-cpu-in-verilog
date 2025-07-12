@@ -44,3 +44,13 @@ What is OP instruction? (Default Operation / Register Type)
     * "x3" is the second source register, which is "rs2". And the bits are [24:20]
 * In this instruction, we get the value from "x2" and "x3", "add" them both and store the
 result in "x1"
+* Also, one important to notice here is that in this instruction type we have "SUB" (Subtract)
+instruction in our ALU. In the "OP_IMM" instruction type, we don't have "SUB" instruction.
+* But if you look at the address of the "ADD" instruction and "SUB" instruction of "OP"
+instruction type, both are same. Both have "000" as their address.
+* So, how can we add this into our ALU and differentiate the "ADD" and "SUB" instruction type
+* Here is where "funct7" comes into picture. We can use the value present in "funct7" to
+differentiate between "ADD" and "SUB" instruction.
+* There are totally 7 bits in "funct7". If the value of "funct7" is "0000000", then we
+should perform "ADD" instruction. If the value of "funct7" is "0100000", then we
+should perform "SUB" instruction.

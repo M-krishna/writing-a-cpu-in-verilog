@@ -71,8 +71,9 @@ module cpu(
 
     alu _alu(
         .A(rs1_data),       // From register rs1
-        .B(alu_b_input),               // rs2_data or immediate value
+        .B(alu_b_input),    // rs2_data or immediate value
         .op(alu_op),        // Control signal
+        .funct7(funct7),
         .out(alu_result)    // To write_data
     );
 
@@ -90,7 +91,11 @@ module cpu(
                 alu_b_input = imm_i;
                 alu_op = funct3;
             end
-            OP: begin end
+            OP: begin
+                write_enable = 1;
+                alu_b_input = rs2_data;
+                alu_op = funct3;
+            end
             LOAD: begin end
             STORE: begin end
             BRANCH: begin end
