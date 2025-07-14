@@ -56,6 +56,9 @@ should perform "ADD" instruction. If the value of "funct7" is "0100000", then we
 should perform "SUB" instruction.
 
 
+14-07-2025
+----------
+
 What is U-Type instruction? (Upper Immediate)
 =============================================
 * Lets first take a look at the instruction encoding format
@@ -67,3 +70,18 @@ What is U-Type instruction? (Upper Immediate)
 ---------------------------------------------------------------
 
 * Let's say we have an instruction like "LUI x1, 0x12345". What should it do?
+* The goal here is to move the value "0x12345" into the "rd" register.
+* The "rd" bits holds the address of an register which is 32-bits wide.
+* The total bits of the immediate value is 20 ([31:12]).
+* Now the question is, in which place should we fit the value in the "rd" register
+* "LUI" stands for "Load Upper Immediate". Meaning we should load the values of upper immediate
+into the register.
+* To do that, we have to do the following:
+    * First, we have to extend the immediate value. But how?
+    * The "rd" register contains 32-bits, and the imm[31:12] contains 20 bits.
+    * The values present in the 20 bits should be present in the Upper bits of "rd" register
+    * To do that in Verilog, we can do something like this:
+        * wire [31:0] imm_u = {current_instruction[31:12], 12'b0};
+        * As you can see, we are putting the 20 bits of immediate value in the upper bits and
+        for the rest (12 bits) we are filling it with 0.
+* This is how "LUI" (U-Type) works.
