@@ -5,12 +5,16 @@ module cpu(
 );
     // ============= PROGRAM COUNTER =======================
     reg [31:0] program_counter; // to hold the current address
+    reg pc_src;                 // Program counter source
 
     always @(posedge clk or posedge reset) begin
         if (reset) begin    // Asynchronous reset
             program_counter <= 32'b0;
         end else begin
-            program_counter <= program_counter + 4;
+            if (pc_src)
+                program_counter <= program_counter + imm_j;     // JAL Jump
+            else
+                program_counter <= program_counter + 4;         // Normal increment
         end
     end
 
@@ -37,6 +41,9 @@ module cpu(
     // Immediate extraction (I-type)
     wire [31:0] imm_i = {{20{current_instruction[31]}}, current_instruction[31:20]}; // Sign extension
     wire [31:0] imm_u = {current_instruction[31:12], 12'b0};
+    wire [31:0] imm_j = {
+        {20{current_instruction[31]}}
+    }
 
     // Instruction Types ( Common RV32I Opcodes )
     localparam OP_IMM   = 7'b0010011;         // I-Type (ADDI, ANDI, etc.)
@@ -60,7 +67,7 @@ module cpu(
         case (write_data_src)
             2'b00: write_data = alu_result;
             2'b01: write_data = imm_u;
-            2'b10: write_data = 32'b0;
+            2'b10: write_data = program_counter + 4;
             2'b11: write_data = 32'b0;
             default: write_data = 32'b0;
         endcase
@@ -101,6 +108,7 @@ module cpu(
         alu_b_input = 32'b0;
         alu_op = 3'b0;
         write_data_src = 2'b0;
+        pc_src = 0;
 
         case (opcode)
             OP_IMM: begin
@@ -122,7 +130,11 @@ module cpu(
                 write_enable = 1;
                 write_data_src = 2'b01;
             end
-            JAL: begin end
+            JAL: begin 
+                write_enable = 1;
+                write_data_src = 2'b10;
+                pc_src = 1;
+            end
             default: begin end
         endcase
     end

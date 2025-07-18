@@ -85,3 +85,61 @@ into the register.
         * As you can see, we are putting the 20 bits of immediate value in the upper bits and
         for the rest (12 bits) we are filling it with 0.
 * This is how "LUI" (U-Type) works.
+
+
+What is J-Type instruction? (Jump Type)
+=======================================
+
+* Let's first take a look at the instruction encoding format
+
+------------------------------------------------------
+31                          12  11      7  6        0
+------------------------------------------------------
+    imm[20|10:1|11|19:12]           rd       opcode
+------------------------------------------------------
+
+* Let's say we have an instruction like "JAL x1, label".
+* Here "JAL" stands for "Jump and Link".
+* From the instruction "JAL x1, label", we can infer the following:
+
+    1. LINK (Save return address):
+        * Store PC + 4 into register x1
+        * This is the address of the next instruction (return address)
+        * Used for function calls to remember where to come back
+    
+    2. JUMP (Change PC)
+        * Calculate new PC = Current PC + immediate_offset
+        * The "label" gets converted to an immediate offset
+        * Jump to this new address
+
+* EXAMPLE:
+    Address 0x1000: JAL x1, function        # Call function
+    Address 0x1004: ADD x2, x3, x4          # Next instruction after call
+    ...
+    Address 0x2000: function:               # Function starts here
+
+What happens:
+    * x1 = 0x1004 (PC + 4, so we can return here later)
+    * PC = 0x2000 (jump to function)
+
+* IMPORTANT: The immediate value is a RELATIVE OFFSET, not an absolute address! 
+    If function is at 0x2000 and JAL is at 0x1000:
+    immediate_offset = 0x2000 - 0x1000 = 0x1000
+
+* The immediate encoding is scrambled in:
+    - Bit 20 (sign) -> instruction[31]
+    - Bits 10:1     -> instruction[30:21]
+    - Bit 11        -> instruction[20]
+    - Bits 19:12    -> instruction[19:12]
+    - Bit 0 is always 0 (addresses are even)
+
+* Why the immediate encoding is scrambled in this way? Let's see:
+
+    * What "imm[20|10:1|11|19:12]" means: This notation means which immediate bits go into
+    which instruction positions:
+
+    * Reading left to right:
+        1. imm[20] = immediate bit 20 (the sign bit)
+        2. imm[10:1] = immediate bits 10 down to 1 (10 bits)
+        3. imm[11] = immediate bit 11 (1 bit)
+        4. imm[19:12] = immediate bits 19 down to 12 (8 bits)
