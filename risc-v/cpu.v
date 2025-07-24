@@ -38,12 +38,17 @@ module cpu(
     wire [4:0] rs2 = current_instruction[24:20];
     wire [6:0] funct7 = current_instruction[31:25];
 
-    // Immediate extraction (I-type)
+    // Immediate extraction
     wire [31:0] imm_i = {{20{current_instruction[31]}}, current_instruction[31:20]}; // Sign extension
     wire [31:0] imm_u = {current_instruction[31:12], 12'b0};
     wire [31:0] imm_j = {
-        {20{current_instruction[31]}}
-    }
+        {11{current_instruction[31]}},      // Sign extension (bits 31 - 21)
+        current_instruction[31],            // imm[20] - sign bit (bit 20)
+        current_instruction[19:12],         // imm[19:12] (bits 19 - 12)
+        current_instruction[20],            // imm[11] (bit 11)
+        current_instruction[30:21],         // imm[10:1] (bits 10-1)
+        1'b0                                // imm[0] (bit 0)
+    };
 
     // Instruction Types ( Common RV32I Opcodes )
     localparam OP_IMM   = 7'b0010011;         // I-Type (ADDI, ANDI, etc.)
