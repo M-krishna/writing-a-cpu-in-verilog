@@ -143,3 +143,31 @@ What happens:
         2. imm[10:1] = immediate bits 10 down to 1 (10 bits)
         3. imm[11] = immediate bit 11 (1 bit)
         4. imm[19:12] = immediate bits 19 down to 12 (8 bits)
+
+
+What is B-Type instruction? (Branch Type)
+=========================================
+
+* Let's take a look at the instruction format
+
+-------------------------------------------------------------------------------------------
+31              25  24      20  19      15  14          12  11              7  6        0
+-------------------------------------------------------------------------------------------
+  imm[12|10:5]        rs2           rs1        funct3          imm[4:1|11]       opcode
+--------------------------------------------------------------------------------------------
+
+* So what does the Branch instruction do?
+    * They compare two registers (rs1 and rs2)
+    * Based on the comparison result, they either:
+        * Take the branch: PC = PC + immediate_offset
+        * Don't take the branch: PC = PC + 4 (normal)
+
+Let's take a look at the encoded instructions one by one:
+---------------------------------------------------------
+
+* current_instruction[6:0] (total 7 bits) - opcode
+* current_instruction[11:7] (total 5 bits) - imm[4:1|11]
+* current_instruction[14:12] (total 3 bits) - funct3
+* current_instruction[19:15] (total 5 bits) - rs1 (Source register 1)
+* current_instruction[24:20] (total 5 bits) - rs2 (Source register 2)
+* current_instruction[31:25] (total 7 bits) - imm[12|10:5]
